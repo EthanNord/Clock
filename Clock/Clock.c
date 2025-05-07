@@ -29,7 +29,7 @@
 // Global Variables:
 WCHAR szTitle[] = L"Clock";                  // The title bar text
 WCHAR szWindowClass[] = L"CLOCK";            // the main window class name
-BOOL g_topMost = FALSE;
+BOOL g_topMost = TRUE;
 BOOL g_seconds = TRUE;
 
 // Forward declarations of functions included in this code module:
@@ -87,14 +87,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    HWND hWnd;
-   DWORD dwStyle = WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX;
+   DWORD dwStyle = WS_SYSMENU | WS_CAPTION;
    RECT rWnd = { 0, 0, WINDOWSIZE, WINDOWSIZE }, rDesktop;
 
-   GetWindowRect(GetDesktopWindow, &rDesktop);
+   SystemParametersInfo(SPI_GETWORKAREA, 0, &rDesktop, 0);
    AdjustWindowRectEx(&rWnd, dwStyle, FALSE, WS_EX_PALETTEWINDOW | WS_EX_APPWINDOW);
 
    hWnd = CreateWindowExW(WS_EX_PALETTEWINDOW | WS_EX_APPWINDOW, szWindowClass, szTitle, dwStyle,
-      CW_USEDEFAULT, 0, rWnd.right - rWnd.left, rWnd.bottom - rWnd.top, NULL, NULL, hInstance, NULL);
+      rDesktop.right - (rWnd.right - rWnd.left), rDesktop.bottom - (rWnd.bottom - rWnd.top),
+       rWnd.right - rWnd.left, rWnd.bottom - rWnd.top, NULL, NULL, hInstance, NULL);
 
    if (!hWnd)
    {
@@ -201,7 +202,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         SetTimer(hWnd, IDT_TIMER1, TIMER_INTERVAL, NULL);
         {
             HMENU hMenu = GetSystemMenu(hWnd, FALSE);
-            InsertMenu(hMenu, 0, MF_BYPOSITION, IDM_ALWAYS, L"&Always on top");
+            InsertMenu(hMenu, 0, MF_BYPOSITION | MF_CHECKED, IDM_ALWAYS, L"&Always on top");
             InsertMenu(hMenu, 1, MF_BYPOSITION | MF_DISABLED, IDM_SECONDS, L"&Show seconds");
             InsertMenu(hMenu, 2, MF_BYPOSITION | MF_SEPARATOR, -1, 0);
         }
