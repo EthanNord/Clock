@@ -14,6 +14,8 @@
 #define IDM_ALWAYS  101
 #define IDM_SECONDS 102
 
+#include "resource.h"
+
 // which format of time to use
 #define CRAZY_MODE
 
@@ -48,12 +50,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
     wcex.hInstance = hInstance;
-    // wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_CLOCK));
+    wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_SMALL));
     wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wcex.lpszMenuName = 0;
     wcex.lpszClassName = szWindowClass;
-    // wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+    wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
     wcex.hIcon = NULL;
     wcex.hIconSm = NULL;
